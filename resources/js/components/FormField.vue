@@ -18,6 +18,7 @@
                     <modal @modal-close="openBrowser = false">
                         <Browser
                             :resource="field.resource"
+                            :filter="field.filter"
                             :title="field.title"
                             :image="field.image"
                             :orderby="field.orderby"
@@ -34,6 +35,7 @@
                 <template v-else-if="openCreator">
                     <modal @modal-close="openCreator = false">
                         <Creator :resourceName="field.resource"
+                            :filter="field.filter"
                             @close="openCreator = false"
                             @created="onCreate"
                         />

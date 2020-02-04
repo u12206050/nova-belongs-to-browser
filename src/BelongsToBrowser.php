@@ -37,6 +37,17 @@ class BelongsToBrowser extends Field
     }
 
     /**
+     * Specifiy preset values to be used to filter and create new resource
+     */
+    public function filter(string $field, string $value) {
+        return $this->withMeta([
+            'filter' => [
+                "$field" => $value
+            ]
+        ]);
+    }
+
+    /**
      * Specifiy an optional field that results should be grouped and filtered in.
      */
     public function group(string $groupBy, array $groupOptions) {

@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  props: ['resource', 'title', 'image', 'orderby', 'direction', 'group', 'ck', 'multiple', 'current'],
+  props: ['resource', 'title', 'image', 'orderby', 'direction', 'group', 'ck', 'multiple', 'current', 'filter'],
   data() {
     return {
       loading: true,
@@ -40,7 +40,6 @@ export default {
       results: [],
       size: 'medium',
       query: '',
-      filter: '',
       page: 1,
       perPage: 25,
       selected: {}

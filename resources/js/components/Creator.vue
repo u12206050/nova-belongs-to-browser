@@ -1,5 +1,5 @@
 <template>
-  <loading-view :loading="loading" class="bg-40 p-2 rounded embeded-view">
+  <loading-view :loading="loading" class="bg-40 p-4 rounded embeded-view">
     <form
       v-if="panels"
       @submit="submitViaCreateResource"
@@ -23,7 +23,9 @@
 
       <!-- Create Button -->
       <div class="flex items-center p-2 bg-white rounded">
-        <cancel-button @click.prevent="$emit('close')" />
+        <button class="btn btn-link dim cursor-pointer text-80 ml-auto mr-6" @click.prevent="$emit('close')">
+          Cancel
+        </button>
 
         <progress-button
           dusk="create-button"
@@ -48,6 +50,9 @@ export default {
     resourceName: {
       type: String,
       required: true,
+    },
+    filter: {
+      type: Object
     },
     viaResource: {
       default: '',
@@ -108,6 +113,18 @@ export default {
           },
         }
       )
+
+      console.log(fields)
+
+      if (this.filter) {
+        Object.keys(this.filter).forEach(attr => {
+          let field = fields.find(f => f.attribute === attr)
+          if (field) {
+            field.value = this.filter[attr]
+            field.readonly = true
+          }
+        })
+      }
 
       this.panels = panels
       this.fields = fields

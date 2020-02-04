@@ -35,6 +35,12 @@ class ResourceController extends Controller
             $query->where($title, 'LIKE', '%'.$search.'%');
         }
 
+        if ($request->has('filter') && $filter = $request->input('filter')) {
+            foreach ($filter as $field => $value) {
+                $query->where($field, '=', $value);
+            }
+        }
+
         if ($request->has(['offset', 'limit'])) {
             $offset = $request->input('offset');
             $limit = $request->input('limit');
