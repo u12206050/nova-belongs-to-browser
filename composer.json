@@ -1,6 +1,5 @@
 {
     "name": "day4/belongs-to-browser",
-    "version": "1.0.0",
     "description": "A Laravel Nova field.",
     "keywords": [
         "laravel",
