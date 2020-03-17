@@ -15,7 +15,7 @@
                     @click.prevent="openBrowser = true"
                     class="m-4 form-file-btn btn btn-default btn-primary select-none">Select</button>
                 <template v-if="openBrowser">
-                    <modal @modal-close="openBrowser = false" class="max-h-screen" style="top: 50%; transform: translateY(-50%);">
+                    <modal @modal-close="openBrowser = false" class="max-h-screen">
                         <Browser
                             :resource="field.resource"
                             :filter="field.filter"
@@ -33,7 +33,7 @@
                     </modal>
                 </template>
                 <template v-else-if="openCreator">
-                    <modal @modal-close="openCreator = false" class="max-h-screen" style="top: 50%; transform: translateY(-50%);">
+                    <modal @modal-close="openCreator = false" class="max-h-screen">
                         <Creator :resourceName="field.resource"
                             :filter="field.filter"
                             @close="openCreator = false"

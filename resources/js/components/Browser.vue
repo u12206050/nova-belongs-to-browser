@@ -1,7 +1,7 @@
 <template>
   <loading-view :loading="loading" class="embeded-view p-2 bg-40 rounded-lg shadow-lg overflow-hidden">
     <div class="overflow-hidden">
-      <div class="block mb-2 border-b border-50 p-2 flex items-center justify-between w-full">
+      <div class="mb-2 border-b border-50 p-2 flex items-center justify-between w-full">
         <button class="btn btn-sm px-4 rounded btn-primary" @click.prevent="$emit('new')" >New</button>
         <div class="flex-1 px-2">
           <div class="bg-white rounded p-1 flex w-full">
