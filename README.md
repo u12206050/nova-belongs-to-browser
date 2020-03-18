@@ -1,7 +1,10 @@
-# Relationship Media Browser
+# Relationship Browser
 
 Display items with a title and an image from a relationship to attach to the resource.
 
+## Setup
+
+composer require day4/belongs-to-browser
 
 ## Usage
 
@@ -11,7 +14,7 @@ Display items with a title and an image from a relationship to attach to the res
 config(string $resource, string $title = 'title', string $image = 'image', string $orderby = 'updated_at', string $direction = 'desc')
 
 
-### Examples
+### Example Field for images resource
 
 ```
 use Day4\BelongsToBrowser\BelongsToBrowser;
@@ -23,6 +26,10 @@ use Day4\BelongsToBrowser\BelongsToBrowser;
         ->group('ratio', \App\Statics\ImageRatios::Options())
         ->filter('ratio', '16:9'),
 ```
+
+![](/screens/field.png)
+![](/screens/browser.png)
+![](/screens/creator.png)
 
 ## Roadmap
 
