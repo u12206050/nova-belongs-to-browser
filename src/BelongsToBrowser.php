@@ -24,15 +24,23 @@ class BelongsToBrowser extends Field
      * @param string  $direction The direction to order by
      * @return $this
      */
-    public function config(string $resource, string $title = 'title', string $image = 'image', string $orderby = 'updated_at', string $direction = 'desc')
+    public function config(string $resource, string $title = 'title', string $image = 'image')
     {
         return $this->withMeta([
             'resource' => $resource,
             'title' => $title,
             'image' => $image,
-            'orderby' => $orderby,
-            'direction' => $direction,
             'ck' => Hash::make("$resource:-:$title:-:$image")
+        ]);
+    }
+
+    /**
+     * Specifiy field and direction to order results by
+     */
+    public function order(string $orderby = 'updated_at', string $direction = 'desc') {
+        return $this->withMeta([
+            'orderby' => $orderby,
+            'direction' => $direction
         ]);
     }
 
