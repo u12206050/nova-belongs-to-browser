@@ -24,7 +24,7 @@
             </div>
           </template>
         </div>
-        <button class="block my-4 mx-auto" @click="loadNext">Load More</button>
+        <button class="block my-4 mx-auto" @click="loadNext" v-if="results.length == page * perPage">Load More</button>
       </div>
       <div class="block mt-2 p-2">
         <button class="btn btn-default btn-primary block mx-auto" @click.prevent="$emit('select', selected)" >Choose</button>
@@ -77,6 +77,7 @@ export default {
         offset: page * perPage - perPage,
         limit: perPage
       }).then(response => {
+
         this.results = page > 1 ? [...this.results, ...response.data] : response.data
 
         if (current) {

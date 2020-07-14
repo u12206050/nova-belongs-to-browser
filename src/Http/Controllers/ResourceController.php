@@ -34,34 +34,45 @@ class ResourceController extends Controller
         }
 
         $modelClass = $resourceClass::$model;
-        $query = $modelClass::orderBy($orderby, $direction);
+        $m = new $modelClass();
 
-        /*
-        $query = DB::table($resource)
-            ->select('id', "$title as title", "$image as image")
-            ->orderBy($orderby, $direction);
-        */
+        $baseWhere = [];
+        $translationWhere = [];
+
+        // Test for translation field
+        if (!$m->useTranslationFallback) {
+            array_push($translationWhere, ['locale', '=', app()->getLocale()]);
+        }
 
         if ($request->has('query') && $search = $request->input('query')) {
-            // Test for translation field
-            $m = new $modelClass();
             if (isset($m->translatedAttributes) && in_array($title, $m->translatedAttributes)) {
-
-                $query->whereHas('translations', function($q) use ($m, $title, $search) {
-                    $q->where($title, 'LIKE', '%'.$search.'%');
-                    if (!$m->useTranslationFallback) {
-                        $q->where('locale', '=', app()->getLocale());
-                    }
-                });
+                array_push($translationWhere, [$title, 'LIKE', "%$search%"]);
             } else {
-                $query->where($title, 'LIKE', '%'.$search.'%');
+                array_push($baseWhere, [$title, 'LIKE', "%$search%"]);
             }
         }
 
         if ($request->has('filter') && $filter = $request->input('filter')) {
             foreach ($filter as $field => $value) {
-                $query->where($field, '=', $value);
+                if (isset($m->translatedAttributes) && in_array($field, $m->translatedAttributes)) {
+                    array_push($translationWhere, [$field, 'LIKE', "%$value%"]);
+                } else {
+                    array_push($baseWhere, [$field, 'LIKE', "%$value%"]);
+                }
             }
+        }
+
+        $query = $modelClass::orderBy($orderby, $direction);
+        if (isset($m->translatedAttributes)) {
+            if (count($translationWhere)) {
+                $query->whereHas('translations', function($q) use ($m, $translationWhere) {
+                    $q->where($translationWhere);
+                });
+            }
+        }
+
+        if (count($baseWhere)) {
+            $query->where($baseWhere);
         }
 
         if ($request->has(['offset', 'limit'])) {
