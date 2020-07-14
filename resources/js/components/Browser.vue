@@ -1,6 +1,6 @@
 <template>
-  <loading-view :loading="loading" class="embeded-view p-2 bg-40 rounded-lg shadow-lg overflow-hidden">
-    <div class="overflow-hidden">
+  <loading-view :loading="loading" style="max-height: 90vh" class="relative embeded-view p-2 bg-40 rounded-lg shadow-lg overflow-hidden flex flex-col">
+    <div class="flex-1 flex flex-col min-h-0">
       <div class="mb-2 border-b border-50 p-2 flex items-center justify-between w-full">
         <button class="btn btn-sm px-4 rounded btn-primary" @click.prevent="$emit('new')" >New</button>
         <div class="flex-1 px-2">
@@ -13,15 +13,18 @@
         </div>
         <button class="btn-icon font-bold text-xl" @click.prevent="$emit('close')">⨉</button>
       </div>
-      <div class="flex flex-wrap w-full bg-white rounded">
-        <template v-for="item in results">
-          <div :key="item.id" class="p-2" @click.prevent="toggle(item)">
-            <div class="rounded" :style="width" :class="selected[item.id] ? 'shadow border-2 border-primary' : 'border border-50'">
-              <img :src="item.image" class="thumbsize w-full" :style="height">
-              <p class="border-t border-40 pt-1 px-2 text-center m-2 block break-normal text-sm font-semibold">{{item.title}}</p>
+      <div class="flex-1 w-full bg-white rounded overflow-y-auto min-h-0">
+        <div class="flex flex-wrap justify-center">
+          <template v-for="item in results">
+            <div :key="item.id" class="p-2" @click.prevent="toggle(item)">
+              <div class="rounded" :style="width" :class="selected[item.id] ? 'shadow border-2 border-primary' : 'border border-50'">
+                <img :src="item.image" class="thumbsize w-full" :style="height">
+                <p class="break-words border-t border-40 pt-1 px-2 text-center m-2 block break-normal text-sm font-semibold">{{item.title}}</p>
+              </div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
+        <button class="block my-4 mx-auto" @click="loadNext">Load More</button>
       </div>
       <div class="block mt-2 p-2">
         <button class="btn btn-default btn-primary block mx-auto" @click.prevent="$emit('select', selected)" >Choose</button>
@@ -62,7 +65,7 @@ export default {
     }
   },
   methods: {
-    load(isSearch) {
+    load() {
       const { resource, title, image, orderby, dir, group, ck, query, filter, page, perPage, current } = this
       this.loading = true
       return Nova.request().post(`/day4/belongs-to-browser/load/${resource}`, {
@@ -101,6 +104,10 @@ export default {
     },
     search() {
       this.page = 1
+      this.load()
+    },
+    loadNext() {
+      this.page += 1
       this.load()
     }
   },

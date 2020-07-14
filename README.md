@@ -11,7 +11,13 @@ composer require day4/belongs-to-browser
 
 **BelongsToBrowser**
 
-config(string $resource, string $title = 'title', string $image = 'image', string $orderby = 'updated_at', string $direction = 'desc')
+config(string $resource, string $title = 'title', string $image = 'image')
+
+order(string $orderby = 'updated_at', string $direction = 'desc')
+
+filter(string $field, string $value)
+
+group(string $groupBy, array $groupOptions)
 
 
 ### Example Field for images resource

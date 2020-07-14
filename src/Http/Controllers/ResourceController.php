@@ -43,7 +43,19 @@ class ResourceController extends Controller
         */
 
         if ($request->has('query') && $search = $request->input('query')) {
-            $query->where($title, 'LIKE', '%'.$search.'%');
+            // Test for translation field
+            $m = new $modelClass();
+            if (isset($m->translatedAttributes) && in_array($title, $m->translatedAttributes)) {
+
+                $query->whereHas('translations', function($q) use ($m, $title, $search) {
+                    $q->where($title, 'LIKE', '%'.$search.'%');
+                    if (!$m->useTranslationFallback) {
+                        $q->where('locale', '=', app()->getLocale());
+                    }
+                });
+            } else {
+                $query->where($title, 'LIKE', '%'.$search.'%');
+            }
         }
 
         if ($request->has('filter') && $filter = $request->input('filter')) {
