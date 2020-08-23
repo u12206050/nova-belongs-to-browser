@@ -11,9 +11,11 @@
                     </div>
                 </template>
 
+                <button v-if="items.length" @click.prevent="clear"
+                    class="m-4 form-file-btn btn btn-default btn-danger select-none">Clear</button>
                 <button
                     @click.prevent="openBrowser = true"
-                    class="m-4 form-file-btn btn btn-default btn-primary select-none">Select</button>
+                    class="m-4 form-file-btn btn btn-default btn-primary select-none">{{ items.length ? 'Change' : 'Select' }}</button>
                 <template v-if="openBrowser">
                     <modal @modal-close="openBrowser = false" class="max-h-screen">
                         <Browser
@@ -100,6 +102,11 @@ export default {
          */
         handleChange(value) {
             this.value = value
+        },
+
+        clear() {
+            this.items = []
+            this.$emit('input', this.value = null)
         },
 
         onSelect(selected) {
