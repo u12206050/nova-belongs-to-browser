@@ -56,7 +56,7 @@ import Creator from './Creator.vue'
 export default {
     mixins: [FormField, HandlesValidationErrors],
     props: ['resourceName', 'resourceId', 'field'],
-    data() {
+    data () {
         return {
             loading: false,
             openBrowser: false,
@@ -71,7 +71,7 @@ export default {
         /*
          * Set the initial, internal value for the field.
          */
-        setInitialValue() {
+        setInitialValue () {
             this.value = this.field.value || ''
 
             if (this.value) {
@@ -104,7 +104,7 @@ export default {
             this.value = value
         },
 
-        clear() {
+        clear () {
             this.items = []
             this.$emit('input', this.value = null)
         },
@@ -128,7 +128,7 @@ export default {
             this.openBrowser = false
             this.openCreator = false
         },
-        createNew() {
+        createNew () {
             this.openBrowser = false
             this.openCreator = true
         }

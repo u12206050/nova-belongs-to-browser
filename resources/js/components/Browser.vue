@@ -4,7 +4,7 @@
       <div class="mb-2 border-b border-50 p-2 flex items-center justify-between w-full">
         <button class="btn btn-sm px-4 rounded btn-primary" @click.prevent="$emit('new')" >New</button>
         <div class="flex-1 px-2">
-          <div class="bg-white rounded p-1 flex w-full">
+          <div class="bg-white rounded p-1 flex w-full" @keydown.enter="search">
             <input placeholder="search" class="flex-1 rounded p-1" v-model="query">
             <button class="btn-icon" @click.prevent="search">
               <icon type="search"></icon>
@@ -36,7 +36,7 @@
 <script>
 export default {
   props: ['resource', 'title', 'image', 'orderby', 'direction', 'group', 'ck', 'multiple', 'current', 'filter'],
-  data() {
+  data () {
     return {
       loading: true,
       dir: this.direction,
@@ -48,15 +48,21 @@ export default {
       selected: {}
     }
   },
+  created () {
+      document.addEventListener('keydown', this.handleEnter, )
+  },
+  destroyed () {
+      document.removeEventListener('keydown', this.handleEnter)
+  },
   computed: {
-    width() {
+    width () {
       switch(this.size) {
         case 'small': return 'width: 100px;';
         case 'medium': return 'width: 200px;';
         case 'large': return 'width: 300px;';
       }
     },
-    height() {
+    height () {
       switch(this.size) {
         case 'small': return 'height: 100px;';
         case 'medium': return 'height: 200px;';
@@ -65,7 +71,13 @@ export default {
     }
   },
   methods: {
-    load() {
+    handleEnter (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false
+        }
+    },
+    load () {
       const { resource, title, image, orderby, dir, group, ck, query, filter, page, perPage, current } = this
       this.loading = true
       return Nova.request().post(`/day4/belongs-to-browser/load/${resource}`, {
@@ -103,16 +115,16 @@ export default {
         this.$set(this.selected, item.id, item)
       }
     },
-    search() {
+    search () {
       this.page = 1
       this.load()
     },
-    loadNext() {
+    loadNext () {
       this.page += 1
       this.load()
     }
   },
-  mounted() {
+  mounted () {
     this.load()
   }
 }
