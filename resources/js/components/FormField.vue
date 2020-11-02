@@ -11,37 +11,39 @@
                     </div>
                 </template>
 
-                <button v-if="items.length" @click.prevent="clear"
-                    class="m-4 form-file-btn btn btn-default btn-danger select-none">Clear</button>
-                <button
-                    @click.prevent="openBrowser = true"
-                    class="m-4 form-file-btn btn btn-default btn-primary select-none">{{ items.length ? 'Change' : 'Select' }}</button>
-                <template v-if="openBrowser">
-                    <modal @modal-close="openBrowser = false" class="max-h-screen">
-                        <Browser
-                            :resource="field.resource"
-                            :filter="field.filter"
-                            :title="field.title"
-                            :image="field.image"
-                            :orderby="field.orderby"
-                            :direction="field.direction"
-                            :group="field.group"
-                            :ck="field.ck"
-                            :current="value"
-                            @close="openBrowser = false"
-                            @select="onSelect"
-                            @new="createNew"
-                        />
-                    </modal>
-                </template>
-                <template v-else-if="openCreator">
-                    <modal @modal-close="openCreator = false" class="max-h-screen">
-                        <Creator :resourceName="field.resource"
-                            :filter="field.filter"
-                            @close="openCreator = false"
-                            @created="onCreate"
-                        />
-                    </modal>
+                <template v-if="! isReadonly">
+                    <button v-if="items.length" @click.prevent="clear"
+                        class="m-4 form-file-btn btn btn-default btn-danger select-none">Clear</button>
+                    <button
+                        @click.prevent="openBrowser = true"
+                        class="m-4 form-file-btn btn btn-default btn-primary select-none">{{ items.length ? 'Change' : 'Select' }}</button>
+                    <template v-if="openBrowser">
+                        <modal @modal-close="openBrowser = false" class="max-h-screen">
+                            <Browser
+                                :resource="field.resource"
+                                :filter="field.filter"
+                                :title="field.title"
+                                :image="field.image"
+                                :orderby="field.orderby"
+                                :direction="field.direction"
+                                :group="field.group"
+                                :ck="field.ck"
+                                :current="value"
+                                @close="openBrowser = false"
+                                @select="onSelect"
+                                @new="createNew"
+                            />
+                        </modal>
+                    </template>
+                    <template v-else-if="openCreator">
+                        <modal @modal-close="openCreator = false" class="max-h-screen">
+                            <Creator :resourceName="field.resource"
+                                :filter="field.filter"
+                                @close="openCreator = false"
+                                @created="onCreate"
+                            />
+                        </modal>
+                    </template>
                 </template>
             </loading-view>
         </template>
@@ -94,14 +96,18 @@ export default {
          * Fill the given FormData object with the field's internal value.
          */
         fill(formData) {
-            formData.append(this.field.attribute, this.value || '')
+            if (! this.isReadonly) {
+                formData.append(this.field.attribute, this.value || '')
+            }
         },
 
         /**
          * Update the field's internal value.
          */
         handleChange(value) {
-            this.value = value
+            if (! this.isReadonly) {
+                this.value = value
+            }
         },
 
         clear () {
